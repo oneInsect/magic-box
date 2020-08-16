@@ -11,7 +11,7 @@ create table if not exists `files` (
     `modified_time` datetime not null comment 'update time',
     primary key (`id`),
     unique key `uk_name` (`path`)
-)engine=innodb default charset=utf8mb4 comment 'teacher';
+)engine=innodb default charset=utf8mb4 comment 'files';
 
 
 create table if not exists `categories` (
@@ -23,4 +23,4 @@ create table if not exists `categories` (
     `modified_time` datetime not null comment 'update time',
     primary key (`id`),
     unique key `uk_name` (`name`)
-)engine=innodb default charset=utf8mb4 comment 'teacher';
+)engine=innodb default charset=utf8mb4 comment 'categories';
