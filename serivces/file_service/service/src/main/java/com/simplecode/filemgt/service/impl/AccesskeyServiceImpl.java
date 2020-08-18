@@ -6,6 +6,8 @@ import com.simplecode.filemgt.service.AccesskeyService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  * categories 服务实现类
@@ -17,4 +19,23 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccesskeyServiceImpl extends ServiceImpl<AccesskeyMapper, Accesskey> implements AccesskeyService {
 
+    @Override
+    public List<Accesskey> getAccessKeyAll() {
+        return null;
+    }
+
+    @Override
+    public Accesskey genAK() {
+        return null;
+    }
+
+    @Override
+    public Boolean deleteAKById(String akId) {
+        return null;
+    }
+
+    @Override
+    public List<Accesskey> getAKByPage(String current, String limit) {
+        return null;
+    }
 }

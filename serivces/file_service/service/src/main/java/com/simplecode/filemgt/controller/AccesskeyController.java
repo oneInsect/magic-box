@@ -1,9 +1,13 @@
 package com.simplecode.filemgt.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.simplecode.common.utils.SelfDefineResponse;
+import com.simplecode.filemgt.entity.Accesskey;
+import com.simplecode.filemgt.service.AccesskeyService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
 
 /**
  * <p>
@@ -14,8 +18,38 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2020-08-17
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/filemgt/accesskey")
 public class AccesskeyController {
+
+    @Autowired
+    private AccesskeyService accesskeyService;
+
+    @GetMapping("all")
+    public SelfDefineResponse getAllAK(){
+        List<Accesskey> akList = accesskeyService.getAccessKeyAll();
+        return SelfDefineResponse.ok().data("data", akList);
+    }
+
+    @PostMapping("ak")
+    public SelfDefineResponse genAK(){
+        Accesskey accessKey = accesskeyService.genAK();
+        return SelfDefineResponse.ok().data("accesskey", accessKey);
+    }
+
+    @DeleteMapping("{AKId}")
+    public SelfDefineResponse deleteAK(@PathVariable String AKId){
+        Boolean isDeleted = accesskeyService.deleteAKById(AKId);
+        return SelfDefineResponse.ok();
+    }
+
+    @GetMapping("page/{current}/{limit}")
+    public SelfDefineResponse getAKByPage(@PathVariable String limit, @PathVariable String current){
+        List<Accesskey> AKList = accesskeyService.getAKByPage(current, limit);
+        return SelfDefineResponse.ok();
+    }
+
+
 
 }
 

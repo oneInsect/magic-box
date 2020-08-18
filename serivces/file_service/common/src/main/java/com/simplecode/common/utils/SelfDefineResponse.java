@@ -55,6 +55,20 @@ public class SelfDefineResponse {
         return selfDefineResponse;
     }
 
+    public SelfDefineResponse status(Boolean status){
+        this.setStatus(status);
+        return this;
+    }
+
+    public SelfDefineResponse message(String message){
+        this.setMessage(message);
+        return this;
+    }
+    public SelfDefineResponse data(String key, Object value){
+        this.data.put(key, value);
+        return this;
+    }
+
     @ApiModelProperty(value = "request status")
     private Boolean status;
 
