@@ -1,7 +1,10 @@
 package com.simplecode.filemgt.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
@@ -37,7 +40,38 @@ public class Accesskey implements Serializable {
     private Boolean idDeleted;
 
     @ApiModelProperty(value = "create time")
+    @TableField(fill = FieldFill.INSERT)
     private Date createdTime;
 
+    public String getId() {
+        return id;
+    }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getAccesskey() {
+        return accesskey;
+    }
+
+    public void setAccesskey(String accesskey) {
+        this.accesskey = accesskey;
+    }
+
+    public Boolean getIdDeleted() {
+        return idDeleted;
+    }
+
+    public void setIdDeleted(Boolean idDeleted) {
+        this.idDeleted = idDeleted;
+    }
+
+    public Date getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
+    }
 }
