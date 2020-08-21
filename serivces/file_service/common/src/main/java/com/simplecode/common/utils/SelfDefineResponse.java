@@ -69,6 +69,11 @@ public class SelfDefineResponse {
         return this;
     }
 
+    public SelfDefineResponse data(HashMap<String, Object> map){
+        this.setData(map);
+        return this;
+    }
+
     @ApiModelProperty(value = "request status")
     private Boolean status;
 
