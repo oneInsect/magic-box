@@ -58,16 +58,16 @@ public class CategoriesController {
         String name = cateQuery.getName();
         String begin = cateQuery.getBegin();
         String end = cateQuery.getEnd();
-        if (StringUtils.isEmpty(name)){
+        if (!StringUtils.isEmpty(name)){
             queryWrapper.like("name",name);
         }
-        if (StringUtils.isEmpty(begin)){
+        if (!StringUtils.isEmpty(begin)){
             queryWrapper.ge("created_time",begin);
         }
-        if (StringUtils.isEmpty(end)){
+        if (!StringUtils.isEmpty(end)){
             queryWrapper.le("modified_time",end);
         }
-        queryWrapper.orderByDesc("created_time");
+        queryWrapper.orderByDesc("modified_time");
         categoriesService.page(page, queryWrapper);
 
         long total = page.getTotal();
