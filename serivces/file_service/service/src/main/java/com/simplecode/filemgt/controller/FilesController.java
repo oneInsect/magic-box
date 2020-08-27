@@ -1,7 +1,6 @@
 package com.simplecode.filemgt.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.simplecode.common.utils.FileUtil;
@@ -18,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 
@@ -61,16 +62,16 @@ public class FilesController {
                                                 @RequestBody(required = true) FileQuery fileQuery){
         Page<Files> page = new Page<>(current, limit);
         QueryWrapper<Files> queryWrapper = new QueryWrapper<>();
-        String path = fileQuery.getPath();
+        String name = fileQuery.getName();
         String begin = fileQuery.getBegin();
         String end = fileQuery.getEnd();
-        if (!StringUtils.isEmpty(path)){
-            queryWrapper.like("path", path);
+        if (!StringUtils.isEmpty(name)){
+            queryWrapper.like("name", name);
         }
-        if (!StringUtils.isEmpty(path)){
+        if (!StringUtils.isEmpty(begin)){
             queryWrapper.like("created_time", begin);
         }
-        if (!StringUtils.isEmpty(path)){
+        if (!StringUtils.isEmpty(end)){
             queryWrapper.like("modified_time", end);
         }
         queryWrapper.orderByDesc("modified_time");
@@ -105,19 +106,24 @@ public class FilesController {
     public SelfDefineResponse downloadFile(@PathVariable String fileId){
         Files file = filesService.getById(fileId);
         String path = file.getPath();
+        String fileName = file.getName();
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         assert requestAttributes != null;
         HttpServletResponse response = requestAttributes.getResponse();
-        // 设置信息给客户端不解析
-        String type = new MimetypesFileTypeMap().getContentType(filename);
+        // 设置信息给客户端解析
+        String type = new MimetypesFileTypeMap().getContentType(fileName);
         // 设置contenttype，即告诉客户端所发送的数据属于什么类型
         assert response != null;
         response.setHeader("Content-type",type);
         // 设置编码
-        String hehe = new String(filename.getBytes("utf-8"), "iso-8859-1");
+        String fileNameEncode = new String(fileName.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
         // 设置扩展头，当Content-Type 的类型为要下载的类型时 , 这个信息头会告诉浏览器这个文件的名字和类型。
-        response.setHeader("Content-Disposition", "attachment;filename=" + hehe);
-        FileUtil.download(filename, response);
+        response.setHeader("Content-Disposition", "attachment;filename=" + fileNameEncode);
+        try {
+            FileUtil.download(path, response);
+        }catch (IOException e){
+            return SelfDefineResponse.error().message("get local file error");
+        }
         return SelfDefineResponse.ok();
     }
 }

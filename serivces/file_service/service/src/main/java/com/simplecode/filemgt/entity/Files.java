@@ -39,6 +39,17 @@ public class Files implements Serializable {
     @ApiModelProperty(value = "File Path")
     private String path;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @ApiModelProperty(value = "File Name")
+    private String name;
+
     public String getId() {
         return id;
     }
