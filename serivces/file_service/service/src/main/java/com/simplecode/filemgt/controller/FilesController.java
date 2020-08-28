@@ -78,6 +78,7 @@ public class FilesController {
         filesService.page(page, queryWrapper);
         long total = page.getTotal();
         List<Files> records = page.getRecords();
+        System.out.println(records);
         return SelfDefineResponse.ok().data("total", total).data("records", records);
     }
     @PostMapping("file")

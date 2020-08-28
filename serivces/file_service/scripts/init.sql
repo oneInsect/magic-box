@@ -7,7 +7,7 @@ create table if not exists `files` (
     `cateId` char(19) not null comment 'Category ID',
     `name` varchar(50) not null comment 'File Name',
     `path` varchar(100) not null comment 'File Path',
-    `desc` varchar(200) not null comment 'File Describe',
+    `file_desc` varchar(200) not null comment 'File Describe',
     `id_deleted` tinyint(1) unsigned not null default '0' comment 'logic delete 0: (false) exist, 1: (true) deleted',
     `created_time` datetime not null comment 'create time',
     `modified_time` datetime not null comment 'update time',
@@ -19,7 +19,7 @@ create table if not exists `files` (
 create table if not exists `categories` (
     `id` char(19) not null comment 'Category ID',
     `name` varchar(20) not null comment 'Category Name',
-    `desc` varchar(200) not null comment 'Category describe',
+    `cate_desc` varchar(200) not null comment 'Category describe',
     `id_deleted` tinyint(1) unsigned not null default '0' comment 'logic delete 0: (false) exist, 1: (true) deleted',
     `created_time` datetime not null comment 'create time',
     `modified_time` datetime not null comment 'update time',

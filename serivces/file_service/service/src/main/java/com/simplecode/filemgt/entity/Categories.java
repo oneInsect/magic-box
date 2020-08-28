@@ -1,11 +1,9 @@
 package com.simplecode.filemgt.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.util.Date;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -37,7 +35,7 @@ public class Categories implements Serializable {
     private String name;
 
     @ApiModelProperty(value = "Category Describe")
-    private String desc;
+    private String fileDesc;
 
     @ApiModelProperty(value = "Category Created Time")
     @TableField(fill = FieldFill.INSERT)
@@ -48,6 +46,7 @@ public class Categories implements Serializable {
     private Date modifiedTime;
 
     @ApiModelProperty(value = "logic delete 0: (false) exist, 1: (true) deleted")
+    @TableLogic
     private Boolean isDeleted;
 
 
