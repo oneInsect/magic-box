@@ -5,9 +5,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.simplecode.common.utils.FileUtil;
 import com.simplecode.common.utils.SelfDefineResponse;
+import com.simplecode.filemgt.entity.Categories;
 import com.simplecode.filemgt.entity.Files;
 import com.simplecode.filemgt.entity.vo.FileQuery;
+import com.simplecode.filemgt.entity.vo.FileShow;
+import com.simplecode.filemgt.service.CategoriesService;
 import com.simplecode.filemgt.service.FilesService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +23,7 @@ import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -37,6 +42,9 @@ public class FilesController {
 
     @Autowired
     private FilesService filesService;
+
+    @Autowired
+    private CategoriesService categoriesService;
 
     @GetMapping("all")
     public SelfDefineResponse getAll(){
@@ -78,8 +86,20 @@ public class FilesController {
         filesService.page(page, queryWrapper);
         long total = page.getTotal();
         List<Files> records = page.getRecords();
-        System.out.println(records);
-        return SelfDefineResponse.ok().data("total", total).data("records", records);
+        ArrayList<FileShow> fileShows = new ArrayList<>();
+        for (Files fileObj: records){
+            FileShow fileShow = new FileShow();
+            BeanUtils.copyProperties(fileObj, fileShow);
+            String cateId = fileObj.getCateId();
+            QueryWrapper<Categories> cateQueryWrapper = new QueryWrapper<>();
+            cateQueryWrapper.eq("cate_id", cateId);
+            Categories category = categoriesService.getOne(cateQueryWrapper);
+            String cateName = category.getName();
+            fileShow.setCateName(cateName);
+            fileShows.add(fileShow);
+        }
+        System.out.println(fileShows);
+        return SelfDefineResponse.ok().data("total", total).data("records", fileShows);
     }
     @PostMapping("file")
     public SelfDefineResponse addFile(MultipartFile uploadFile, @RequestBody(required = true) Files files){
