@@ -35,7 +35,7 @@ public class Categories implements Serializable {
     private String name;
 
     @ApiModelProperty(value = "Category Describe")
-    private String fileDesc;
+    private String cateDesc;
 
     @ApiModelProperty(value = "Category Created Time")
     @TableField(fill = FieldFill.INSERT)
@@ -65,12 +65,12 @@ public class Categories implements Serializable {
         this.name = name;
     }
 
-    public String getFileDesc() {
-        return fileDesc;
+    public String getCateDesc() {
+        return cateDesc;
     }
 
-    public void setFileDesc(String fileDesc) {
-        this.fileDesc = fileDesc;
+    public void setCateDesc(String cateDesc) {
+        this.cateDesc = cateDesc;
     }
 
     public Date getCreatedTime() {

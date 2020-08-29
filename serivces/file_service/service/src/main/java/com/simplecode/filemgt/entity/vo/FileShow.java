@@ -41,6 +41,18 @@ public class FileShow {
         this.name = name;
     }
 
+    @Override
+    public String toString() {
+        return "FileShow{" +
+                "id='" + id + '\'' +
+                ", cateName='" + cateName + '\'' +
+                ", name='" + name + '\'' +
+                ", fileDesc='" + fileDesc + '\'' +
+                ", createdTime=" + createdTime +
+                ", modifiedTime=" + modifiedTime +
+                '}';
+    }
+
     public String getFileDesc() {
         return fileDesc;
     }

@@ -91,9 +91,7 @@ public class FilesController {
             FileShow fileShow = new FileShow();
             BeanUtils.copyProperties(fileObj, fileShow);
             String cateId = fileObj.getCateId();
-            QueryWrapper<Categories> cateQueryWrapper = new QueryWrapper<>();
-            cateQueryWrapper.eq("cate_id", cateId);
-            Categories category = categoriesService.getOne(cateQueryWrapper);
+            Categories category = categoriesService.getById(cateId);
             String cateName = category.getName();
             fileShow.setCateName(cateName);
             fileShows.add(fileShow);
