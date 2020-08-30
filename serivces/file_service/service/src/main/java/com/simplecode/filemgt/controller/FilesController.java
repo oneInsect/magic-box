@@ -96,11 +96,10 @@ public class FilesController {
             fileShow.setCateName(cateName);
             fileShows.add(fileShow);
         }
-        System.out.println(fileShows);
         return SelfDefineResponse.ok().data("total", total).data("records", fileShows);
     }
-    @PostMapping("file")
-    public SelfDefineResponse addFile(MultipartFile uploadFile, @RequestBody(required = true) Files files){
+    @PostMapping("files")
+    public SelfDefineResponse addFiles(MultipartFile uploadFile, @RequestBody(required = true) Files files){
         boolean saved = filesService.save(files);
         String cateId = files.getCateId();
         if (saved){
@@ -108,6 +107,30 @@ public class FilesController {
         }
         return SelfDefineResponse.ok();
     }
+
+    @PostMapping("file")
+    @ResponseBody
+    public SelfDefineResponse addFile(MultipartFile uploadFile){
+        if (uploadFile == null) {
+            return SelfDefineResponse.error().message("Upload error, please choose file");
+        }
+        if (FileUtil.saveTmpFile(uploadFile)){
+            return SelfDefineResponse.ok();
+        }else{
+            return SelfDefineResponse.error().message("Save tmp file failed");
+        }
+    }
+
+    @PostMapping("fileinfo")
+    public SelfDefineResponse addFileInfo(@RequestBody(required = true) Files files){
+        boolean saved = filesService.save(files);
+        String cateId = files.getCateId();
+        if (saved){
+            FileUtil.saveTmpFile2server(cateId);
+        }
+        return SelfDefineResponse.ok();
+    }
+
 
     @DeleteMapping("{fileId}")
     public SelfDefineResponse deleteFile(@PathVariable String fileId){

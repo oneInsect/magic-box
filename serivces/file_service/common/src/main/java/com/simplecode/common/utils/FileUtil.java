@@ -8,6 +8,9 @@ import java.io.*;
 
 public class FileUtil {
 
+    private static final String userDir = System.getProperty("user.dir");
+    private static final String tmpFileDir = userDir + "/tmpFile";
+
     public static Boolean saveFile(String cate, MultipartFile multipartFile){
         String filename = multipartFile.getOriginalFilename();
         String fileSaveDir = System.getProperty("user.dir") + "/" + "files" + "/" + cate;
@@ -44,4 +47,13 @@ public class FileUtil {
         }
     }
 
+    public static Boolean saveTmpFile(MultipartFile uploadFile) {
+        System.out.println(uploadFile + "-------------");
+        String filename = uploadFile.getOriginalFilename();
+        String filePath = tmpFileDir + "/" + filename;
+        return writeFile(uploadFile, filePath);
+    }
+
+    public static void saveTmpFile2server(String cateId) {
+    }
 }
