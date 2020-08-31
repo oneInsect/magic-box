@@ -109,8 +109,7 @@ public class FilesController {
     }
 
     @PostMapping("file")
-    @ResponseBody
-    public SelfDefineResponse addFile(MultipartFile uploadFile){
+    public SelfDefineResponse addFile(@RequestParam(value = "file") MultipartFile uploadFile){
         if (uploadFile == null) {
             return SelfDefineResponse.error().message("Upload error, please choose file");
         }
@@ -125,10 +124,15 @@ public class FilesController {
     public SelfDefineResponse addFileInfo(@RequestBody(required = true) Files files){
         boolean saved = filesService.save(files);
         String cateId = files.getCateId();
+        String fileName = files.getName();
+        String filePath = files.getPath();
         if (saved){
-            FileUtil.saveTmpFile2server(cateId);
+            Boolean fileSaved = FileUtil.saveTmpFile2server(cateId, fileName, filePath);
+            if (fileSaved){
+                return SelfDefineResponse.ok();
+            }
         }
-        return SelfDefineResponse.ok();
+        return SelfDefineResponse.error();
     }
 
 

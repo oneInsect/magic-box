@@ -1,5 +1,9 @@
 package com.simplecode.common.utils;
 
+import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -9,7 +13,9 @@ import java.io.*;
 public class FileUtil {
 
     private static final String userDir = System.getProperty("user.dir");
-    private static final String tmpFileDir = userDir + "/tmpFile";
+    private static final String tmpFileDir = userDir + "/tmpFile/";
+    private static final String saveFileDir = userDir + "/saved/";
+    private static final Logger log = LoggerFactory.getLogger(FileUtil.class);
 
     public static Boolean saveFile(String cate, MultipartFile multipartFile){
         String filename = multipartFile.getOriginalFilename();
@@ -48,12 +54,26 @@ public class FileUtil {
     }
 
     public static Boolean saveTmpFile(MultipartFile uploadFile) {
-        System.out.println(uploadFile + "-------------");
         String filename = uploadFile.getOriginalFilename();
-        String filePath = tmpFileDir + "/" + filename;
+        String filePath = tmpFileDir + filename;
         return writeFile(uploadFile, filePath);
     }
 
-    public static void saveTmpFile2server(String cateId) {
+
+    public static Boolean saveTmpFile2server(String cateId, String fileName, String filePath) {
+        String tmpFilePathString = tmpFileDir + fileName;
+        String saveFilePathString = saveFileDir + filePath + "/" + fileName;
+        File tmpFilePath = new File(tmpFilePathString);
+        File saveFilePath = new File(saveFilePathString);
+        if (!saveFilePath.getParentFile().exists()){
+            saveFilePath.mkdirs();
+        }
+        try {
+            FileCopyUtils.copy(tmpFilePath, saveFilePath);
+        }catch (IOException e){
+            log.error("save file failed, file");
+            return false;
+        }
+        return true;
     }
 }
