@@ -4,8 +4,8 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class FileQuery {
 
-    @ApiModelProperty(value = "File Path")
-    private String path;
+    @ApiModelProperty(value = "File Name")
+    private String name;
 
     @ApiModelProperty(value = "Start Time")
     private String begin;
@@ -13,12 +13,12 @@ public class FileQuery {
     @ApiModelProperty(value = "End Time")
     private String end;
 
-    public String getPath() {
-        return path;
+    public String getName() {
+        return name;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getBegin() {

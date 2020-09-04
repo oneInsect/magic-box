@@ -1,11 +1,9 @@
 package com.simplecode.filemgt.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.util.Date;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -39,6 +37,17 @@ public class Files implements Serializable {
     @ApiModelProperty(value = "File Path")
     private String path;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @ApiModelProperty(value = "File Name")
+    private String name;
+
     public String getId() {
         return id;
     }
@@ -63,12 +72,12 @@ public class Files implements Serializable {
         this.path = path;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getFileDesc() {
+        return fileDesc;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setFileDesc(String fileDesc) {
+        this.fileDesc = fileDesc;
     }
 
     public Date getCreatedTime() {
@@ -96,7 +105,7 @@ public class Files implements Serializable {
     }
 
     @ApiModelProperty(value = "File Describe")
-    private String desc;
+    private String fileDesc;
 
     @ApiModelProperty(value = "File Created Time")
     @TableField(fill = FieldFill.INSERT)
@@ -107,6 +116,7 @@ public class Files implements Serializable {
     private Date modifiedTime;
 
     @ApiModelProperty(value = "logic delete 0: (false) exist, 1: (true) deleted")
+    @TableLogic
     private Boolean isDeleted;
 
 

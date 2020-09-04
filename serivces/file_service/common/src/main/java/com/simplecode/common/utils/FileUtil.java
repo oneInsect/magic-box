@@ -1,5 +1,9 @@
 package com.simplecode.common.utils;
 
+import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -7,6 +11,11 @@ import java.io.*;
 
 
 public class FileUtil {
+
+    private static final String userDir = System.getProperty("user.dir");
+    private static final String tmpFileDir = userDir + "/tmpFile/";
+    private static final String saveFileDir = userDir + "/saved/";
+    private static final Logger log = LoggerFactory.getLogger(FileUtil.class);
 
     public static Boolean saveFile(String cate, MultipartFile multipartFile){
         String filename = multipartFile.getOriginalFilename();
@@ -29,13 +38,13 @@ public class FileUtil {
         }
         return true;
     }
-    public static void download(String filename, HttpServletResponse res) throws IOException {
+    public static void download(String filePath, HttpServletResponse res) throws IOException {
         // 发送给客户端的数据
         OutputStream outputStream = res.getOutputStream();
         byte[] buff = new byte[1024];
         BufferedInputStream bis = null;
         // 读取filename
-        bis = new BufferedInputStream(new FileInputStream(new File("./file/" + filename)));
+        bis = new BufferedInputStream(new FileInputStream(new File(filePath)));
         int i = bis.read(buff);
         while (i != -1) {
             outputStream.write(buff, 0, buff.length);
@@ -44,4 +53,27 @@ public class FileUtil {
         }
     }
 
+    public static Boolean saveTmpFile(MultipartFile uploadFile) {
+        String filename = uploadFile.getOriginalFilename();
+        String filePath = tmpFileDir + filename;
+        return writeFile(uploadFile, filePath);
+    }
+
+
+    public static Boolean saveTmpFile2server(String cateId, String fileName, String filePath) {
+        String tmpFilePathString = tmpFileDir + fileName;
+        String saveFilePathString = saveFileDir + filePath + "/" + fileName;
+        File tmpFilePath = new File(tmpFilePathString);
+        File saveFilePath = new File(saveFilePathString);
+        if (!saveFilePath.getParentFile().exists()){
+            saveFilePath.mkdirs();
+        }
+        try {
+            FileCopyUtils.copy(tmpFilePath, saveFilePath);
+        }catch (IOException e){
+            log.error("save file failed, file");
+            return false;
+        }
+        return true;
+    }
 }
