@@ -4,6 +4,7 @@ import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -60,18 +61,21 @@ public class FileUtil {
     }
 
 
-    public static Boolean saveTmpFile2server(String cateId, String fileName, String filePath) {
+    public static Boolean saveTmpFile2server(String fileName, String filePath) {
         String tmpFilePathString = tmpFileDir + fileName;
-        String saveFilePathString = saveFileDir + filePath + "/" + fileName;
+        String saveFilePathString = saveFileDir + fileName;
+        if (!StringUtils.isEmpty(filePath)) {
+            saveFilePathString = saveFileDir + filePath + "/" + fileName;
+        }
         File tmpFilePath = new File(tmpFilePathString);
         File saveFilePath = new File(saveFilePathString);
         if (!saveFilePath.getParentFile().exists()){
-            saveFilePath.mkdirs();
+            saveFilePath.getParentFile().mkdirs();
         }
         try {
             FileCopyUtils.copy(tmpFilePath, saveFilePath);
         }catch (IOException e){
-            log.error("save file failed, file");
+            log.error("save file failed, file: " + fileName);
             return false;
         }
         return true;

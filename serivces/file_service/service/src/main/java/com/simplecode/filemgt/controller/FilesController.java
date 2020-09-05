@@ -123,11 +123,10 @@ public class FilesController {
     @PostMapping("fileinfo")
     public SelfDefineResponse addFileInfo(@RequestBody(required = true) Files files){
         boolean saved = filesService.save(files);
-        String cateId = files.getCateId();
         String fileName = files.getName();
         String filePath = files.getPath();
         if (saved){
-            Boolean fileSaved = FileUtil.saveTmpFile2server(cateId, fileName, filePath);
+            Boolean fileSaved = FileUtil.saveTmpFile2server(fileName, filePath);
             if (fileSaved){
                 return SelfDefineResponse.ok();
             }
