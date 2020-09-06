@@ -1,12 +1,15 @@
 package com.simplecode.filemgt.controller;
 
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.simplecode.common.utils.SelfDefineResponse;
 import com.simplecode.filemgt.entity.Accesskey;
+import com.simplecode.filemgt.entity.Categories;
 import com.simplecode.filemgt.service.AccesskeyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -49,9 +52,15 @@ public class AccesskeyController {
     }
 
     @GetMapping("page/{current}/{limit}")
-    public SelfDefineResponse getAKByPage(@PathVariable String limit, @PathVariable String current){
-        List<Accesskey> AKList = accesskeyService.getAKByPage(current, limit);
-        return SelfDefineResponse.ok();
+    public SelfDefineResponse getAKByPage(@PathVariable long limit, @PathVariable long current){
+        Page<Accesskey> page = new Page<>(current, limit);
+        accesskeyService.page(page, null);
+        long total = page.getTotal();
+        List<Accesskey> records = page.getRecords();
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("total", total);
+        map.put("records", records);
+        return SelfDefineResponse.ok().data(map);
     }
 
 

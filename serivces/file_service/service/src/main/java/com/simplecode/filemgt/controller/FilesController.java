@@ -98,6 +98,17 @@ public class FilesController {
         }
         return SelfDefineResponse.ok().data("total", total).data("records", fileShows);
     }
+
+    @GetMapping("fileinfo/{fileId}")
+    public SelfDefineResponse getFileInfo(@PathVariable String fileId){
+        Files files = filesService.getById(fileId);
+        if (files != null){
+            return SelfDefineResponse.ok().data("files", files);
+        }
+        return SelfDefineResponse.error().message("Get file info failed, id= " + fileId);
+    }
+
+
     @PostMapping("files")
     public SelfDefineResponse addFiles(MultipartFile uploadFile, @RequestBody(required = true) Files files){
         boolean saved = filesService.save(files);
@@ -123,11 +134,10 @@ public class FilesController {
     @PostMapping("fileinfo")
     public SelfDefineResponse addFileInfo(@RequestBody(required = true) Files files){
         boolean saved = filesService.save(files);
-        String cateId = files.getCateId();
         String fileName = files.getName();
         String filePath = files.getPath();
         if (saved){
-            Boolean fileSaved = FileUtil.saveTmpFile2server(cateId, fileName, filePath);
+            Boolean fileSaved = FileUtil.saveTmpFile2server(fileName, filePath);
             if (fileSaved){
                 return SelfDefineResponse.ok();
             }
@@ -142,9 +152,9 @@ public class FilesController {
         return SelfDefineResponse.ok();
     }
 
-    @PutMapping("{fileId}")
-    public SelfDefineResponse modifyFile(@PathVariable String fileId, MultipartFile multipartFile, @RequestBody(required = true) Files files){
-
+    @PutMapping("file")
+    public SelfDefineResponse modifyFile(@RequestBody(required = true) Files files){
+        boolean updated = filesService.updateById(files);
         return SelfDefineResponse.ok();
     }
 

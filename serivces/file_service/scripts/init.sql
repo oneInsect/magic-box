@@ -34,7 +34,7 @@ create table if not exists `categories` (
 
 create table if not exists `accesskey`(
     `id` char(19) not null comment 'Accesskey ID',
-    `accesskey` char(19) not null comment 'Accesskey',
+    `accesskey` char(50) not null comment 'Accesskey',
     `is_deleted` tinyint(1) unsigned not null default '0' comment 'logic delete 0: (false) exist, 1: (true) deleted',
     `created_time` datetime not null comment 'create time',
     primary key (`id`),
