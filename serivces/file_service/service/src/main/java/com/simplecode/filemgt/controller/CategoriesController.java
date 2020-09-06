@@ -77,8 +77,13 @@ public class CategoriesController {
 
     @PostMapping("category")
     public SelfDefineResponse addCategory(@RequestBody(required = true) Categories categories){
-        boolean saved = categoriesService.save(categories);
+        try {
+            categoriesService.save(categories);
+        }catch (Exception e){
+            return SelfDefineResponse.error().message("Add category failed, maybe duplicated with exist category name!");
+        }
         return SelfDefineResponse.ok();
+
     }
 
     @DeleteMapping("{categoryId}")
