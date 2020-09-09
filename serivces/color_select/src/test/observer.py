@@ -35,7 +35,7 @@ class Observer(metaclass=ABCMeta):
 
     @abstractmethod
     def update(self, state):
-        """all observers must have this function to become a observer"""
+        """all observers must implement this function to become a observer"""
 
 
 
