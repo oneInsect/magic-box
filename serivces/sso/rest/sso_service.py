@@ -2,11 +2,8 @@
 entry of sso service, provided user authentication and token generate.
 """
 
-
-from flask import Flask, make_response
-
-
-APP = Flask(__name__)
+from flask import make_response
+from .app_config import APP
 
 
 @APP.route("/test", methods=["get"])
