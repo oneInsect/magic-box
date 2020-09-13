@@ -16,7 +16,7 @@ create table if not exists `files` (
     `created_time` datetime not null comment 'create time',
     `modified_time` datetime not null comment 'update time',
     primary key (`id`),
-    unique key `uk_name` (`path`)
+    unique key `uk_path` (`path`)
 )engine=innodb default charset=utf8mb4 comment 'files';
 
 

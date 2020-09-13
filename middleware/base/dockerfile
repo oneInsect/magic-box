@@ -1,0 +1,10 @@
+FROM centos:1.1.0
+
+
+
+RUN yum -y install wget gcc automake autoconf libtool make net-tools tree
+
+
+WORKDIR /opt
+
+CMD ["bash"]
