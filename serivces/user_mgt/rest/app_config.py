@@ -5,13 +5,12 @@ from redis import Redis
 from flask_session import Session
 from flask import Flask
 
-
 APP = Flask(__name__)
 
 
 APP.config['SESSION_TYPE'] = 'redis'   #session存储格式为redis
 APP.config['SESSION_REDIS'] = Redis(    #redis的服务器参数
-    host='127.0.0.1',                 #服务器地址
+    host='192.168.1.188',                 #服务器地址
     port=6379)                           #服务器端口
 
 APP.config['SESSION_USE_SIGNER'] = True   #是否强制加盐，混淆session

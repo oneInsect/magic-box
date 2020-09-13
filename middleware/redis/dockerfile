@@ -1,14 +1,15 @@
-FROM centos:1.1.0
-
-
-
-RUN yum -y install wget gcc automake autoconf libtool make \
-    && wget http://download.redis.io/releases/redis-6.0.8.tar.gz \
-    && tar xzf redis-6.0.8.tar.gz -d /opt/redis \
-    && cd /opt/redis/redis-6.0.8 \
-    && make
-
+FROM centos:base
 
 WORKDIR /opt
 
-CMD ["src/redis-server"]
+COPY start.sh /opt
+COPY redis-6.0.8.tar.gz /opt
+
+RUN mkdir /opt/redis && tar xzf redis-6.0.8.tar.gz -C /opt/redis \
+    && rm -rf redis-6.0.8.tar.gz \
+    && cd /opt/redis/redis-6.0.8 \
+    && make \
+    && chmod 750 /opt/start.sh
+
+
+CMD ["/opt/start.sh"]
