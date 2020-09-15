@@ -2,11 +2,12 @@
 entry of sso service, provided user authentication and token generate.
 """
 
-from flask import make_response, session
+from flask import make_response, session, request
+from flask_login import login_required
 from user_mgt.rest.app_config import APP
 
 
-@APP.route("/index", methods=["get"])
+@APP.route("/magicbox/", methods=["get"])
 def index():
     session['username'] = 'zhangvalue'
     return make_response("ok", 200)
@@ -15,6 +16,26 @@ def index():
 def index1():
     value = session['username']
     return make_response(value, 200)
+
+
+@APP.route("/magicbox/v1/usermgt/session", methods=("POST",))
+def login():
+    params = request.form
+    user_name = params.get("user_name")
+    password = params.get("password")
+    email = params.get("email")
+
+
+@APP.route("/magicbox/v1/usermgt/user", methods=("POST",))
+def register():
+    pass
+
+
+@APP.route("/magicbox/v1/usermgt/<_session>", methods=("GET",))
+@login_required
+def validate(_session):
+    return make_response("ok", 200)
+
 
 
 if __name__ == '__main__':
