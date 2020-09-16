@@ -31,11 +31,6 @@ def register():
     pass
 
 
-@APP.route("/magicbox/v1/usermgt/<_session>", methods=("GET",))
-@login_required
-def validate(_session):
-    return make_response("ok", 200)
-
 
 
 if __name__ == '__main__':
