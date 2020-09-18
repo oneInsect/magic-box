@@ -3,7 +3,6 @@ entry of sso service, provided user authentication and token generate.
 """
 
 from flask import make_response, session, request
-from flask_login import login_required
 
 from py_common.errors.user_mgt_errors import DataMappingError
 from user_mgt.rest.app_config import APP
@@ -27,10 +26,9 @@ def login():
     params = request.json
     user_mapper = UserMapper(**params)
     if user_mapper.is_validate():
-        session["user_name"] = params.get("user_name")
-        session["mobile"] = params.get("mobile")
-        session["email"] = params.get("email")
-        return
+        user_mapper.set_user2session()
+        return make_response("success", 200)
+    return make_response("auth failed", 403)
 
 
 @APP.route("/magicbox/v1/usermgt/user", methods=("POST",))
@@ -38,15 +36,12 @@ def register():
     params = request.json
     user_mapper = UserMapper(**params)
     try:
-        user_id = user_mapper.save()
-        session["id"] = user_id
-        session["user_name"] = params.get("user_name")
-        session["mobile"] = params.get("mobile")
-        session["email"] = params.get("email")
-        return make_response("success", 200)
+        user_mapper.save()
     except DataMappingError:
+        LOG.exception("register user failed.")
         return make_response("some thing wrong in the backend", 500)
-
+    user_mapper.set_user2session()
+    return make_response("success", 200)
 
 if __name__ == '__main__':
     APP.run()

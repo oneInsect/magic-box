@@ -7,7 +7,7 @@ from crypto_service.crypto import AES128Encrypt, AES128Decrypt
 class TestCrypto(TestCase):
 
     def setUp(self):
-        self.pwd = "change"
+        self.pwd = "123456"
 
     def tearDown(self):
         self.pwd = None

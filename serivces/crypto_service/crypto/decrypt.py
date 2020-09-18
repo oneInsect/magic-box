@@ -11,5 +11,5 @@ class AES128Decrypt(CryptoBase):
 
     def decrypt(self, encrypt_str):
         cipher = AES.new(self.root_key, self.mode, self.iv)
-        plain_text = cipher.decrypt(b16decode(encrypt_str))
+        plain_text = self.unpad(cipher.decrypt(b16decode(encrypt_str)))
         return plain_text.rstrip().decode('utf-8')
