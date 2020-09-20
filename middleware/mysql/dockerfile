@@ -1,2 +1,25 @@
-FROM clearlinux:1.1.0
+FROM centos:base
+
+
+WORKDIR /opt/mysql
+
+
+COPY start.sh /opt/
+
+RUN yum install -y numactl libaio net-tools \
+    && wget http://192.168.1.190:8005/filemgt/files/1307629142887395329 \
+    && tar axvf 1307629142887395329 \
+    && rpm -ivh mysql-community-common-8.0.21-1.el8.x86_64.rpm \
+    && rpm -ivh mysql-community-libs-8.0.21-1.el8.x86_64.rpm \
+    && rpm -ivh mysql-community-client-8.0.21-1.el8.x86_64.rpm \
+    && rpm -ivh mysql-community-server-8.0.21-1.el8.x86_64.rpm \
+    && rm -rf * \
+    && chmod +x  * \
+    mysqld --initialize
+
+
+
+ENTRYPOINT ["/sbin/init"]
+
+CMD []
 

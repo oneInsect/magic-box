@@ -1,6 +1,6 @@
 FROM centos:base
 
-WORKDIR /opt
+WORKDIR /opt/redis
 
 COPY start.sh /opt
 COPY redis-6.0.8.tar.gz /opt
