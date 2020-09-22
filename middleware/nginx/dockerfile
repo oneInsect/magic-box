@@ -1,2 +1,15 @@
-FROM clearlinux:1.1.0
+FROM centos:base
 
+WORKDIR /opt/nginx
+
+COPY start.sh /opt/nginx/
+
+
+RUN && wget http://192.168.1.190:8005/filemgt/files/1308430309003386881 \
+    && tar axvf 1307629142887395329 \
+
+    && rm -rf *.rpm 1307629142887395329 \
+    && chmod +x /opt/nginx/start.sh
+
+
+CMD ["/opt/mysql/start.sh"]
