@@ -39,7 +39,8 @@ public class FileUtil {
         }
         return true;
     }
-    public static void download(String filePath, HttpServletResponse res) throws IOException {
+    public static void download(String path, String filename, HttpServletResponse res) throws IOException {
+        String filePath = saveFileDir + path + File.separator + filename;
         // 发送给客户端的数据
         OutputStream outputStream = res.getOutputStream();
         byte[] buff = new byte[1024];

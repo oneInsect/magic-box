@@ -176,7 +176,7 @@ public class FilesController {
         // 设置扩展头，当Content-Type 的类型为要下载的类型时 , 这个信息头会告诉浏览器这个文件的名字和类型。
         response.setHeader("Content-Disposition", "attachment;filename=" + fileNameEncode);
         try {
-            FileUtil.download(path, response);
+            FileUtil.download(path, fileName, response);
         }catch (IOException e){
             return SelfDefineResponse.error().message("get local file error");
         }

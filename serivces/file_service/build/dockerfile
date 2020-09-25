@@ -1,2 +1,10 @@
-FROM clearlinux:1.1.0
+FROM java:base
+
+WORKDIR /opt/fileserver
+
+COPY fileserver /opt/fileserver
+RUN chmod +x /opt/fileserver/start.sh
+
+CMD ["/opt/fileserver/start.sh"]
+
 
