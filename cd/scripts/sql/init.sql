@@ -2,7 +2,7 @@
 CREATE DATABASE magic_service_mgt;
 USE magic_service_mgt;
 
-CREATE TABLE IF NOT EXISTS `t_images` (
+CREATE TABLE IF NOT EXISTS `t_docker_image` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `image_name` varchar(50) not null comment 'Image Name',
   `image_path` varchar(100) not null comment 'Image Path',
