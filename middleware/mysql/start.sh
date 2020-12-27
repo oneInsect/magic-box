@@ -9,6 +9,7 @@ then
     systemctl start mysqld.service
     oldpwd=`cat /var/log/mysqld.log | grep password | awk -F ": " '{print $2}'`
     mysqladmin -uroot -p"${oldpwd}" password 'Changeme_123'
+    mysql -u root -p"Changeme_123" mysql -e "update user set host = '%' where user = 'root';"
     echo "${now} complete initialize." >> /opt/mysql/initialized
 else
     systemctl start mysqld.service

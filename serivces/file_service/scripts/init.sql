@@ -43,14 +43,14 @@ create table if not exists `accesskey`(
 
 
 
-insert into files(id, cate_id, name, path, file_desc, created_time, modified_time) values("123456", "555", "myfile", "/xxx", "first file", "2020-01-01 10:10:10", "2020-01-01 10:10:10");
-insert into categories(id, name, cate_desc, created_time, modified_time) values("555", "first cate", "xxxx", "2020-01-01 10:10:10", "2020-01-01 10:10:10");
-insert into accesskey(id, accesskey, created_time)values ("d123", "keyddd", "2020-01-01 10:10:10");
-
-select * from files;
-select * from categories;
-select * from accesskey;
-
-
-SELECT  id,cate_id,path,name,file_desc,created_time,modified_time,is_deleted  FROM files  WHERE  is_deleted=0     ORDER BY modified_time DESC;
-SELECT id,name,file_desc,created_time,modified_time,is_deleted FROM categories WHERE id=?  AND is_deleted=0
+# insert into files(id, cate_id, name, path, file_desc, created_time, modified_time) values("123456", "555", "myfile", "/xxx", "first file", "2020-01-01 10:10:10", "2020-01-01 10:10:10");
+# insert into categories(id, name, cate_desc, created_time, modified_time) values("555", "first cate", "xxxx", "2020-01-01 10:10:10", "2020-01-01 10:10:10");
+# insert into accesskey(id, accesskey, created_time)values ("d123", "keyddd", "2020-01-01 10:10:10");
+#
+# select * from files;
+# select * from categories;
+# select * from accesskey;
+#
+#
+# SELECT  id,cate_id,path,name,file_desc,created_time,modified_time,is_deleted  FROM files  WHERE  is_deleted=0     ORDER BY modified_time DESC;
+# SELECT id,name,file_desc,created_time,modified_time,is_deleted FROM categories WHERE id=?  AND is_deleted=0

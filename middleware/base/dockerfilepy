@@ -1,0 +1,13 @@
+FROM centos:base
+
+
+COPY Anaconda3-2020.02-Linux-x86_64.sh /opt/package/
+RUN chmod +x /opt/package/Anaconda3-2020.02-Linux-x86_64.sh \
+    && sh /opt/package/Anaconda3-2020.02-Linux-x86_64.sh -b \
+    && rm -rf /opt/package/Anaconda3-2020.02-Linux-x86_64.sh \
+    && echo "PATH=${PATH}:/root/anaconda3/bin" >> /root/.bashrc
+
+
+WORKDIR /opt
+
+CMD ["bash"]

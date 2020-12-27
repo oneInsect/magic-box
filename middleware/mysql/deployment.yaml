@@ -28,7 +28,11 @@ spec: #specification of the resource content 指定该资源的内容
                                # IfNotPresent，如果本地有就不检查，如果没有就拉取
         command: ['/sbin/init'] #启动容器的运行命令，将覆盖容器中的Entrypoint,对应Dockefile中的ENTRYPOINT
         args: ["/opt/mysql/start.sh"] #启动容器的命令参数，对应Dockerfile中CMD参数
-        privileged: true
+        securityContext:
+          privileged: true
+        env:
+        - name: privileged #变量的名字
+          value: "true" #变量的值
         resources: #资源管理
           requests: #容器运行时，最低资源需求，也就是说最少需要多少资源容器才能正常运行
             cpu: 0.2 #CPU资源（核数），两种方式，浮点数或者是整数+m，0.1=100m，最少值为0.001核（1m）
