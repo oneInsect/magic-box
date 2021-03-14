@@ -22,7 +22,7 @@ spec: #specification of the resource content 指定该资源的内容
       containers:
       - name: mysql #容器的名字
         image: 192.168.1.188:9876/mysql #容器使用的镜像地址
-        imagePullPolicy: IfNotPresent #三个选择Always、Never、IfNotPresent，每次启动时检查和更新（从registery）images的策略，
+        imagePullPolicy: Always #三个选择Always、Never、IfNotPresent，每次启动时检查和更新（从registery）images的策略，
                                # Always，每次都检查
                                # Never，每次都不检查（不管本地是否有）
                                # IfNotPresent，如果本地有就不检查，如果没有就拉取
