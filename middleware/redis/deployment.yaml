@@ -1,15 +1,15 @@
 apiVersion: apps/v1 #指定api版本，此值必须在kubectl apiversion中
 kind: Deployment #指定创建资源的角色/类型
 metadata: #资源的元数据/属性
-  name: redis-test #资源的名字，在同一个namespace中必须唯一
+  name: redis #资源的名字，在同一个namespace中必须唯一
   labels: #设定资源的标签
-    k8s-app: redis-test
+    k8s-app: redis
     version: v1
     kubernetes.io/cluster-service: "true"
   annotations:            #自定义注解列表
     name: String        #自定义注解名字
 spec: #specification of the resource content 指定该资源的内容
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       redis: master   #节点选择，先给主机打标签kubectl label nodes kube-node1 zone=node1
@@ -20,8 +20,8 @@ spec: #specification of the resource content 指定该资源的内容
 #  restartPolicy: Always #表明该容器一直运行，默认k8s的策略，在此容器退出后，会立即创建一个相同的容器
     spec:
       containers:
-      - name: redis-test #容器的名字
-        image: redis:base #容器使用的镜像地址
+      - name: redis #容器的名字
+        image: 192.168.1.188:9876/redis:base #容器使用的镜像地址
         imagePullPolicy: IfNotPresent #三个选择Always、Never、IfNotPresent，每次启动时检查和更新（从registery）images的策略，
                                # Always，每次都检查
                                # Never，每次都不检查（不管本地是否有）
