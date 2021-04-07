@@ -1,10 +1,12 @@
 package com.simplecode.service.config;
 
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.simplecode.service.entity.Permission;
 import com.simplecode.service.entity.Role;
 import com.simplecode.service.entity.RolePermissionRelation;
 import com.simplecode.service.entity.Users;
 import com.simplecode.service.service.UsersService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -18,6 +20,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 @Configuration
 @MapperScan("com.simplecode.service.mapper")
@@ -25,6 +28,11 @@ public class ShiroRealm extends AuthorizingRealm {
     @Resource
     private UsersService usersService;
 
+    // 必须重写此方法，不然Shiro会报错
+    @Override
+    public boolean supports(AuthenticationToken token) {
+        return token instanceof JwtToken;
+    }
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         // 能进入这里说明用户已经通过验证了
@@ -43,21 +51,38 @@ public class ShiroRealm extends AuthorizingRealm {
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        // 获取用户输入的账户
-        String username = (String) authenticationToken.getPrincipal();
-        System.out.println(authenticationToken.getPrincipal());
-//         通过username从数据库中查找 Users 对象
-//         实际项目中，这里可以根据实际情况做缓存，如果不做，Shiro自己也是有时间间隔机制，2分钟内不会重复执行该方法
-        Users userInfo  = usersService.findByUsername(username);
-        if (null == userInfo ) {
-            return null;
+        // 这里的 token是从 JWTFilter 的 executeLogin 方法传递过来的，已经经过了解密
+        String token = (String) authenticationToken.getCredentials();
+//        String encryptToken = UofferUtil.encryptToken(token); //加密token
+        String username = JwtUtil.getUsername(token); //从token中获取username
+        Integer userId = JwtUtil.getUserId(token);    //从token中获取userId
+
+        // 通过redis查看token是否过期
+//        HttpServletRequest request = HttpContextUtil.getHttpServletRequest();
+//        String ip = IPUtil.getIpAddr(request);
+//        String encryptTokenInRedis = redisUtil.get(Constant.RM_TOKEN_CACHE + token + StringPool.UNDERSCORE + ip);
+//        if (!token.equalsIgnoreCase(encryptTokenInRedis)) {
+//            throw new AuthenticationException("token已经过期");
+//        }
+//
+//        // 如果找不到，说明已经失效
+//        if (StringUtils.isBlank(encryptTokenInRedis)) {
+//            throw new AuthenticationException("token已经过期");
+//        }
+//
+//        if (StringUtils.isBlank(username)) {
+//            throw new AuthenticationException("token校验不通过");
+//        }
+
+        // 通过用户id查询用户信息
+        Users user = usersService.getById(userId);
+
+        if (user == null) {
+            throw new AuthenticationException("用户名或密码错误");
         }
-        SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(
-                userInfo , // 用户名
-                userInfo.getUserPassword(), // 密码
-                ByteSource.Util.bytes(userInfo.getSalt()), // salt=username+salt
-                getName() // realm name
-        );
-        return simpleAuthenticationInfo;
+        if (!JwtUtil.verify(token, username, user.getUserPassword())) {
+            throw new AuthenticationException("token校验不通过");
+        }
+        return new SimpleAuthenticationInfo(token, token, "febs_shiro_realm");
     }
 }
