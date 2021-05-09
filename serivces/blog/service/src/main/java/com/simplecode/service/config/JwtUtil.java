@@ -83,7 +83,7 @@ public class JwtUtil {
      * @param secret   用户的密码
      * @return token 加密的token
      */
-    public static String sign(String username, String secret, Integer userId) {
+    public static String sign(String username, String secret, Long userId) {
         try {
             Map<String, Object> map = new HashMap<>();
             map.put("alg", "HS256");

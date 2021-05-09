@@ -40,8 +40,6 @@ public class Users implements Serializable {
     @TableId(value = "user_id", type = IdType.AUTO)
     private Long userId;
 
-    private String salt = "951cd60dec2104024949d2e0b2af45ae"; // 加密密码的盐
-
     @ApiModelProperty(value = "用户名")
     private String userName;
 
@@ -80,6 +78,6 @@ public class Users implements Serializable {
 
     @JsonIgnoreProperties(value = {"users"})
     @ManyToMany(fetch = FetchType.EAGER) // 立即从数据库中进行加载数据
-    @JoinTable(name = "Role", joinColumns = @JoinColumn(name = "userId"), inverseJoinColumns = @JoinColumn(name = "roleId"))
+    @JoinTable(name = "t_role", joinColumns = @JoinColumn(name = "userId"), inverseJoinColumns = @JoinColumn(name = "roleId"))
     private List<Role> roles; // 一个用户具有多个角色
 }
