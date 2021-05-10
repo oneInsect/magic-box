@@ -1,10 +1,8 @@
 package com.simplecode.service.config;
 
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
-import com.simplecode.service.entity.Permission;
-import com.simplecode.service.entity.Role;
-import com.simplecode.service.entity.RolePermissionRelation;
-import com.simplecode.service.entity.Users;
+import com.simplecode.service.entity.*;
+import com.simplecode.service.service.UserRoleRelationService;
 import com.simplecode.service.service.UsersService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -27,6 +25,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.List;
 import java.util.Objects;
 
 @Configuration
@@ -38,6 +37,9 @@ public class ShiroRealm extends AuthorizingRealm {
     @Resource
     private UsersService usersService;
 
+    @Resource
+    private UserRoleRelationService userRoleRelationService;
+
     // 必须重写此方法，不然Shiro会报错
     @Override
     public boolean supports(AuthenticationToken token) {
@@ -47,12 +49,16 @@ public class ShiroRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         // 能进入这里说明用户已经通过验证了
         Users users = (Users) principalCollection.getPrimaryPrincipal();
+        Long userId = users.getUserId();
+        List<UserRoleRelation> UserRoleRelations = userRoleRelationService.findRolesByUserId(userId);
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-        for (Role role : users.getRoles()) {
-            simpleAuthorizationInfo.addRole(role.getRoleName());
-            for (Permission permission : role.getPermissions()) {
-                simpleAuthorizationInfo.addStringPermission(permission.getPermissionName());
-            }
+        for (UserRoleRelation UserRoleRelation : UserRoleRelations) {
+            Integer roleId = UserRoleRelation.getRoleId();
+
+//            simpleAuthorizationInfo.addRole(role.getRoleName());
+//            for (Permission permission : role.getPermissions()) {
+//                simpleAuthorizationInfo.addStringPermission(permission.getPermissionName());
+//            }
         }
         return simpleAuthorizationInfo;
     }

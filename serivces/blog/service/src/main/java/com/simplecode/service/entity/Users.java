@@ -12,6 +12,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 
 import javax.persistence.FetchType;
@@ -76,8 +78,4 @@ public class Users implements Serializable {
     @TableLogic
     private Integer isDeleted;
 
-    @JsonIgnoreProperties(value = {"users"})
-    @ManyToMany(fetch = FetchType.EAGER) // 立即从数据库中进行加载数据
-    @JoinTable(name = "t_role", joinColumns = @JoinColumn(name = "userId"), inverseJoinColumns = @JoinColumn(name = "roleId"))
-    private List<Role> roles; // 一个用户具有多个角色
 }
