@@ -12,6 +12,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 
 import javax.persistence.FetchType;
@@ -39,8 +41,6 @@ public class Users implements Serializable {
     @ApiModelProperty(value = "用户ID")
     @TableId(value = "user_id", type = IdType.AUTO)
     private Long userId;
-
-    private String salt = "951cd60dec2104024949d2e0b2af45ae"; // 加密密码的盐
 
     @ApiModelProperty(value = "用户名")
     private String userName;
@@ -78,8 +78,4 @@ public class Users implements Serializable {
     @TableLogic
     private Integer isDeleted;
 
-    @JsonIgnoreProperties(value = {"users"})
-    @ManyToMany(fetch = FetchType.EAGER) // 立即从数据库中进行加载数据
-    @JoinTable(name = "Role", joinColumns = @JoinColumn(name = "userId"), inverseJoinColumns = @JoinColumn(name = "roleId"))
-    private List<Role> roles; // 一个用户具有多个角色
 }

@@ -2,6 +2,7 @@ package com.simplecode.service.controller;
 
 
 import com.simplecode.common.utils.SDResponse;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -18,6 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/service/articles")
 public class ArticlesController {
+    @RequiresPermissions("bus:careerTalk:query")
+    public SDResponse hello(){
+        return SDResponse.ok();
+    }
+
 
 }
 
