@@ -1,12 +1,13 @@
 package com.simplecode.service.controller;
 
 
+import com.simplecode.common.exception.GlobalException;
 import com.simplecode.common.utils.SDResponse;
+import com.simplecode.service.entity.Articles;
+import com.simplecode.service.service.ArticlesService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -23,6 +24,24 @@ public class ArticlesController {
     public SDResponse hello(){
         return SDResponse.ok();
     }
+
+    @Autowired
+    ArticlesService articlesService;
+
+    @PostMapping("article")
+    public SDResponse addArticle(@RequestBody(required = true) Articles articles){
+        articlesService.save(articles);
+        return SDResponse.ok();
+    }
+
+    @GetMapping("{articleId}")
+    public SDResponse addArticle(@PathVariable String articleId) throws GlobalException {
+        articlesService.findArticleById(articleId);
+        return SDResponse.ok();
+    }
+
+
+
 
 
 }
