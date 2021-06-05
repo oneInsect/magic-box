@@ -20,10 +20,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/service/articles")
 public class ArticlesController {
-    @RequiresPermissions("bus:careerTalk:query")
-    public SDResponse hello(){
-        return SDResponse.ok();
-    }
 
     @Autowired
     ArticlesService articlesService;
@@ -35,11 +31,16 @@ public class ArticlesController {
     }
 
     @GetMapping("{articleId}")
-    public SDResponse addArticle(@PathVariable String articleId) throws GlobalException {
-        articlesService.findArticleById(articleId);
-        return SDResponse.ok();
+    public SDResponse findArticle(@PathVariable String articleId) throws GlobalException {
+        Articles article = articlesService.findArticleById(articleId);
+        return SDResponse.ok().data("article", article);
     }
 
+    @DeleteMapping("{articleId}")
+    public SDResponse removeArticle(@PathVariable String articleId) throws GlobalException {
+        articlesService.removeArticleById(articleId);
+        return SDResponse.ok();
+    }
 
 
 

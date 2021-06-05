@@ -25,7 +25,6 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
 
     @Override
     public Articles findArticleById(String articleId) throws GlobalException {
-        QueryWrapper<Articles> articleQuery = new QueryWrapper<>();
         if (!articleId.isEmpty()){
             log.info("find article by Id" + articleId);
             return this.getById(articleId);
