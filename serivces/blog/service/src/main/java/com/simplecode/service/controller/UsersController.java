@@ -1,17 +1,25 @@
 package com.simplecode.service.controller;
 
 
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.simplecode.common.utils.AESUtils;
 import com.simplecode.common.utils.SDResponse;
 import com.simplecode.service.config.JwtUtil;
+import com.simplecode.service.config.RedisUtil;
 import com.simplecode.service.entity.Users;
 import com.simplecode.service.service.UsersService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.servlet.support.RequestContext;
 
 import java.util.Objects;
+
+import static com.simplecode.service.config.MGTConstants.REDIS_SESSION_TIMEOUT;
+import static com.simplecode.service.config.MGTConstants.TOKEN;
 
 /**
  * <p>
@@ -22,9 +30,12 @@ import java.util.Objects;
  * @since 2021-03-14
  */
 @Slf4j
+@CrossOrigin
 @RestController
 @RequestMapping("/service/users")
 public class UsersController {
+    @Autowired
+    private RedisUtil redisUtil;
 
     @Autowired
     UsersService usersService;
@@ -44,7 +55,17 @@ public class UsersController {
             return SDResponse.error().message("username or password incorrect!");
         }
         String token = JwtUtil.sign(userName, userEntity.getUserPassword(), userEntity.getUserId());
-        return SDResponse.ok().data("Authorization", token).data("users", userEntity);
+        redisUtil.set("Constant.RM_TOKEN_CACHE" + token + StringPool.UNDERSCORE, token, REDIS_SESSION_TIMEOUT);
+
+        return SDResponse.ok().data(TOKEN, token).data("users", userEntity);
+
+    }
+
+    @GetMapping("info")
+    public SDResponse info(@RequestParam(required = true) String token){
+        Integer userId = JwtUtil.getUserId(token);
+        Users user = usersService.findUserById(userId);
+        return SDResponse.ok().data("users", user);
 
     }
 

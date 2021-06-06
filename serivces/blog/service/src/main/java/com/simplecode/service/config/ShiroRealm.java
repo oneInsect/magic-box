@@ -68,56 +68,15 @@ public class ShiroRealm extends AuthorizingRealm {
         return ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
     }
 
-    public static String getIpAddr(HttpServletRequest request) {
-        String ipAddress = null;
-        try {
-            ipAddress = request.getHeader("x-forwarded-for");
-            if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
-                ipAddress = request.getHeader("Proxy-Client-IP");
-            }
-            if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
-                ipAddress = request.getHeader("WL-Proxy-Client-IP");
-            }
-            if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
-                ipAddress = request.getRemoteAddr();
-                if (ipAddress.equals("127.0.0.1")) {
-                    // 根据网卡取本机配置的IP
-                    InetAddress inet = null;
-                    try {
-                        inet = InetAddress.getLocalHost();
-                    } catch (UnknownHostException e) {
-                        e.printStackTrace();
-                    }
-                    assert inet != null;
-                    ipAddress = inet.getHostAddress();
-                }
-            }
-            // 对于通过多个代理的情况，第一个IP为客户端真实IP,多个IP按照','分割
-            if (ipAddress != null && ipAddress.length() > 15) { // "***.***.***.***".length()
-                // = 15
-                if (ipAddress.indexOf(",") > 0) {
-                    ipAddress = ipAddress.substring(0, ipAddress.indexOf(","));
-                }
-            }
-        } catch (Exception e) {
-            ipAddress="";
-        }
-        // ipAddress = this.getRequest().getRemoteAddr();
-
-        return ipAddress;
-    }
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        // 这里的 token是从 JWTFilter 的 executeLogin 方法传递过来的，已经经过了解密
         String token = (String) authenticationToken.getCredentials();
-//        String encryptToken = UofferUtil.encryptToken(token); //加密token
         String username = JwtUtil.getUsername(token); //从token中获取username
         Integer userId = JwtUtil.getUserId(token);    //从token中获取userId
 
 //         通过redis查看token是否过期
         HttpServletRequest request = getHttpServletRequest();
-        String ip = getIpAddr(request);
-        String encryptTokenInRedis = redisUtil.get("Constant.RM_TOKEN_CACHE" + token + StringPool.UNDERSCORE + ip);
+        String encryptTokenInRedis = redisUtil.get("Constant.RM_TOKEN_CACHE" + token + StringPool.UNDERSCORE);
         if (!token.equalsIgnoreCase(encryptTokenInRedis)) {
             throw new AuthenticationException("token已经过期");
         }

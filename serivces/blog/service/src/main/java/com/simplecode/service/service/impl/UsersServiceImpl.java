@@ -27,4 +27,8 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements
         return baseMapper.selectOne(queryWrapper);
     }
 
+    @Override
+    public Users findUserById(Integer userId) {
+        return this.getById(userId);
+    }
 }
