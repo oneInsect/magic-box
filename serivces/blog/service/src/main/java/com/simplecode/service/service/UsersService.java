@@ -15,4 +15,6 @@ public interface UsersService extends IService<Users> {
 
     public Users findByUsername(String username);
 
+    public Users findUserById(Integer userId);
+
 }

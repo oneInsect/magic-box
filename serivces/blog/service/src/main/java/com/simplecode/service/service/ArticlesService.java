@@ -1,5 +1,6 @@
 package com.simplecode.service.service;
 
+import com.simplecode.common.exception.GlobalException;
 import com.simplecode.service.entity.Articles;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -12,5 +13,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2021-03-14
  */
 public interface ArticlesService extends IService<Articles> {
+
+    public Articles findArticleById(String articleId) throws GlobalException;
+
+    public boolean removeArticleById(String articleId) throws GlobalException;
+
+    public boolean updateArticle(Articles articles);
+
+    public String  getString(String articles);
 
 }

@@ -2,7 +2,6 @@ package com.simplecode.service.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.UnauthorizedException;
-import org.apache.shiro.util.AntPathMatcher;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 import org.apache.shiro.web.util.WebUtils;
 import org.springframework.boot.configurationprocessor.json.JSONException;
@@ -17,9 +16,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import static com.simplecode.service.config.MGTConstants.TOKEN;
+
 @Slf4j
 public class JWTFilter extends BasicHttpAuthenticationFilter {
-    private static final String TOKEN = "Authorization";
+
 
     /**
      * 对跨域提供支持

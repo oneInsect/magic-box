@@ -7,11 +7,14 @@ import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.crypto.hash.SimpleHash;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.simplecode.service.config.MGTConstants.TOKEN;
 
 
 @Slf4j
@@ -40,7 +43,7 @@ public class JwtUtil {
 
     public static String getUsername(HttpServletRequest request) {
         // 取token
-        String token = request.getHeader("Authorization");
+        String token = request.getHeader(TOKEN);
         return getUsername(token);
     }
     /**
@@ -59,7 +62,7 @@ public class JwtUtil {
 
     public static Integer getUserId(HttpServletRequest request) {
         // 取token
-        String token = request.getHeader("Authorization");
+        String token = request.getHeader(TOKEN);
         return getUserId(token);
     }
     /**
@@ -101,5 +104,9 @@ public class JwtUtil {
             log.error("error：{}", e);
             return null;
         }
+    }
+
+    public static String encrypt(String var){
+        return new SimpleHash("md5",var,"SALT".getBytes(),2).toHex();
     }
 }

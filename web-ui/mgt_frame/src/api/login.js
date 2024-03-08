@@ -1,19 +1,19 @@
 import request from '@/utils/request'
 
-export function login(username, password) {
+export function login(userName, userPassword) {
   return request({
-    url: '/filemgt/user/login',
+    url: '/service/users/login',
     method: 'post',
     data: {
-      username,
-      password
+      userName,
+      userPassword
     }
   })
 }
 
 export function getInfo(token) {
   return request({
-    url: '/filemgt/user/info',
+    url: '/service/users/info',
     method: 'get',
     params: { token }
   })
