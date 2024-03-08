@@ -47,4 +47,9 @@ public class ArticlesServiceImpl extends ServiceImpl<ArticlesMapper, Articles> i
     public boolean updateArticle(Articles articles) {
         return this.saveOrUpdate(articles);
     }
+
+    @Override
+    public String getString(String articles) {
+        return "null";
+    }
 }

@@ -20,4 +20,6 @@ public interface ArticlesService extends IService<Articles> {
 
     public boolean updateArticle(Articles articles);
 
+    public String  getString(String articles);
+
 }
